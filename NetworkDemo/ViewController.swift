@@ -10,11 +10,37 @@ import UIKit
 
 class ViewController: UIViewController {
 
+    private let dataFetcher = DataFetcherManager()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        remoteFetchPosts()
+        localFetchPosts()
     }
-
-
+    
+    private func remoteFetchPosts() {
+        dataFetcher.fetchPosts { (result) in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let data):
+                print(data.first?.title)
+                break;
+            }
+        }
+    }
+    
+    private func localFetchPosts() {
+        dataFetcher.fetchLocalPosts { (result) in
+            switch result {
+            case .failure(let error):
+                print(error.localizedDescription)
+            case .success(let data):
+                print(data.first?.title)
+                break;
+            }
+        }
+    }
 }
 
